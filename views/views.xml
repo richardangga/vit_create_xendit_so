@@ -6,18 +6,31 @@
       <field name="inherit_id" ref="sale.view_order_form"/>
       <field name="arch" type="xml">
         <notebook position="inside">
-        <!-- <field name="payment_term_id" position="after"> -->
         <page string="Xendit">
           <group>
             <field name="account_so_url"/>
-            <field name="email"/>
+            <field name="created"/>
           </group>
-        </page>       <!-- </field> -->
+        </page>
       </notebook>
         <xpath expr="//header/button['action_quotation_send']" position="after">
           <button name="action_create_xendit_so" string="Create Payment Link" type="object" states="draft" class="btn-primary"/>
         </xpath>
       </field>
+    </record>
+    <record id="email_xendit_so_template" model="mail.template">
+      <field name="name">email_xendit_so_template</field>
+      <field name="model_id" ref="model_sale_order"/>
+      <field name="auto_delete" eval="True"/>
+      <field name="email_from">${(object.external)}</field>
+      <field name="email_to">${(object.email)}</field>
+      <field name="subject">Payment Link Completion</field>
+      <field name="body_html"><![CDATA[
+				<p>Kepada Bapak/Ibu ${(object.partner_id.display_name)},<br/><br/>
+				Terima kasih telah melakukan pemesanan terhadap layanan produk ${(object.merchant)}.<br/>
+				<br/>Anda tinggal satu langkah lagi yaitu proses pembayaran agar transaksi selesai. Caranya mudah, anda tinggal klik link dibawah ini : <br/><br/>
+				<a href="${(object.account_so_url)}">Account Url</a><br/><br/>
+        Demikian kami sampaikan, atas perhatiannya kami ucapkan terima kasih. Apabila Bapak/Ibu mengalami kendala atau membutuhkan informasi, silakan menghubungi Customer Care 24 jam kami di nomor telepon 08xx xxxx xxx, Webchat, E-mail : ${(object.external)} atau kunjungi website kami di : www.toffinindonesia.com.]]></field>
     </record>
   </data>
 </odoo>
