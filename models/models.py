@@ -3,7 +3,7 @@
 from odoo import models, fields, api, _
 import requests
 import simplejson
-import datetime
+import time
 from odoo.osv import expression
 import re
 import dateutil.parser
@@ -19,9 +19,10 @@ class vit_create_xendit_so(models.Model):
 	created = fields.Date(string='Date Created',readonly=True)
 	expired = fields.Date(string='Expiry Date', readonly=True)
 	corporate = fields.Text(string='Corporate', readonly=True)
-	vabankcuspas = fields.Text(readonly=True)
 	payment_type = fields.Selection([('va_payment','Virtual Account'),('credit_card','Credit Card')], string="Payment Type")
 	amount_type_pay = fields.Float()
+	id_xendit = fields.Text()
+	user_xendit = fields.Text()
 
 	@api.multi
 	def action_create_xendit_so(self):
@@ -32,7 +33,7 @@ class vit_create_xendit_so(models.Model):
 		if self.payment_type == 'credit_card':
 			self.amount_type_pay = (self.amount_total * 0.0263) + 1800
 		data = {
-				'external_id'	:	self.user_id.email,
+				'external_id'	:	'invoice_' + self.name + time.strftime('%Y%m%d%H%M%S'),
 				'payer_email'	:	self.partner_id.email,
 				'description'	:	"Total sudah termasuk biaya admin sebesar Rp %s" % self.amount_type_pay,
 				'amount'		:	self.amount_total + self.amount_type_pay
@@ -44,19 +45,15 @@ class vit_create_xendit_so(models.Model):
 		if 'error_code' in res:
 			raise UserError(res['message'])
 
+		self.id_xendit = res['id']
+		self.user_xendit = res['user_id']
 		self.external = res['external_id']	
 		self.account_so_url = res['invoice_url']
 		self.email = res['payer_email']
 		self.merchant = res['merchant_name']
 		self.created = res['created']
 		self.expired = res['expiry_date']
-		# datas = {'va_number':self.partner_id.va_number,'va_bank':self.partner_id.va_bank}
-		# self.vabankcuspas = "Atau transfer bank melalui virtual account anda dibawah ini : <br/>"
-		# self.vabankcuspas += "No VA  : {va_number} <br/>".format(**datas)
-		# self.vabankcuspas += "Bank   : {va_bank} <br/>".format(**datas)
 
-		# if self.partner_id.va_bank == False or self.partner_id.va_number == False:
-		# 	self.vabankcuspas = ""
 		self.ensure_one()
 		ir_model_data = self.env['ir.model.data']
 		try:
