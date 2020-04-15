@@ -17,7 +17,7 @@
 				</page>
 			</notebook>
 				<xpath expr="//header/button['action_quotation_send']" position="after">
-					<button name="action_create_xendit_so" string="Create Payment Link" type="object" states="draft" class="btn-primary"/>
+					<button name="action_create_xendit_so" string="Create Payment Link" type="object" states="sent,sale" class="btn-primary"/>
 				</xpath>
 			</field>
 		</record>
