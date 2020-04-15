@@ -39,7 +39,7 @@ class vit_create_xendit_so(models.Model):
 				'payer_email'	: self.partner_id.email,
 				'description'	: "Total sudah termasuk biaya admin sebesar Rp %s" % self.amount_type_pay,
 				'amount'	: self.amount_total + self.amount_type_pay,
-                                'fixed_va'      : True,
+                                #'fixed_va'      : True,
                                 'callback_virtual_account_id'      : self.partner_id.va_external_id,
 		}
 		_logger.info("data ke xendit %s", data)
