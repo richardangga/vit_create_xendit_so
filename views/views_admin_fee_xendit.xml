@@ -1,0 +1,17 @@
+<odoo>
+	<data>
+		
+		<record model="ir.ui.view" id="view_inherit_admin_fee_xendit_form">
+			<field name="name">view_inherit_admin_fee_xendit_form.form</field>
+			<field name="model">sale.order</field>
+			<field name="inherit_id" ref="sale.view_order_form"/>
+
+			<field name="arch" type="xml">
+				<xpath expr="//group[@name='sale_total']/field[@name='amount_tax']" position="after">
+					<field name="amount_type_pay" widget="monetary" readonly="1" string="Admin Fee" />
+				</xpath>
+			</field>
+		</record>
+
+	</data>
+</odoo>

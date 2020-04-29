@@ -1,44 +1,38 @@
 <odoo>
 	<data>
+
+
 		<record model="ir.ui.view" id="view_inherit_xendit_so_form">
 			<field name="name">view_inherit_xendit_so_form.form</field>
 			<field name="model">sale.order</field>
 			<field name="inherit_id" ref="sale.view_order_form"/>
+			
 			<field name="arch" type="xml">
+				
 				<xpath expr="//sheet/group/group[2]/field[@name='payment_term_id']" position="after">
-					<field name="payment_type"/>
+					<field name="payment_type" invisible="1"/>
 				</xpath>
+
 				<notebook position="inside">
-				<page string="Xendit">
-					<group>
-						<field name="account_so_url"/>
-						<field name="created"/>
-					</group>
-				</page>
-			</notebook>
+					<page string="Xendit Information">
+						<field name="xendit_info_ids">
+							<tree create="false" delete="false">
+								<field name="created" />
+								<field name="bank_code" />
+								<field name="va_number" />
+								<field name="account_so_url" />
+								<button name="redirect" type="object" icon="fa-globe"/>
+							</tree>
+						</field>
+					</page>
+				</notebook>
+
 				<xpath expr="//header/button['action_quotation_send']" position="after">
 					<button name="action_create_xendit_so" string="Create Payment Link" type="object" states="sent,sale" class="btn-primary"/>
 				</xpath>
+
 			</field>
 		</record>
-		<record id="email_xendit_so_template" model="mail.template">
-			<field name="name">email_xendit_so_template</field>
-			<field name="model_id" ref="model_sale_order"/>
-			<field name="auto_delete" eval="True"/>
-			<field name="email_from">${(object.external)}</field>
-			<field name="email_to">${(object.email)}</field>
-			<field name="subject">Payment Link Completion</field>
-			<field name="body_html"><![CDATA[
-			<p>Kepada Bapak/Ibu ${(object.partner_id.display_name)},<br/><br/>
-			Terima kasih telah melakukan pemesanan terhadap layanan produk ${(object.merchant)}.<br/>
-			<br/>Anda tinggal satu langkah lagi yaitu proses pembayaran agar transaksi selesai. Caranya mudah, anda tinggal klik link dibawah ini : <br/><br/>
-			<a href="${(object.account_so_url)}">Payment Link</a><br/><br/>
-			Atau transfer bank melalui virtual account anda dibawah ini : <br/><br/>
-			No VA  : ${(object.partner_id.va_number)}<br/><br/>
-			Nama Bank  : ${(object.partner_id.va_bank)}<br/><br/>
-			Demikian kami sampaikan, atas perhatiannya kami ucapkan terima kasih. Apabila Bapak/Ibu mengalami kendala atau membutuhkan informasi, silakan menghubungi Customer Care 24 jam kami di nomor telepon 08xx xxxx xxx, Webchat, E-mail : ${(object.external)} atau kunjungi website kami di : www.toffinindonesia.com.
-			]]>
-			</field>
-		</record>
+
 	</data>
 </odoo>

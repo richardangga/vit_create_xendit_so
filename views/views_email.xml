@@ -1,0 +1,41 @@
+<odoo>
+	<data>
+		
+		<record id="email_xendit_so_template" model="mail.template">
+			<field name="name">email_xendit_so_template</field>
+			<field name="model_id" ref="model_sale_order"/>
+			<field name="auto_delete" eval="True"/>
+			<field name="email_from">${(object.external)}</field>
+			<field name="email_to">${(object.partner_id.email)}</field>
+			<field name="subject">Info - Payment Link Completion</field>
+			<field name="body_html"><![CDATA[
+			<p>Hai ${(object.partner_id.display_name)},</p>
+			<p>Terima kasih telah melakukan pemesanan terhadap layanan produk.<br/><br/>
+			Anda tinggal satu langkah lagi yaitu proses pembayaran agar transaksi selesai. Caranya mudah, anda tinggal klik link dibawah ini : <br/><br/></p>
+			<table style="border-collapse: collapse; border: 1px solid black;">
+				<tr>
+					<th style="text-align: center; border: 1px solid black;">Bank</th>
+					<th style="text-align: center; border: 1px solid black;">VA Number</th>
+					<th style="text-align: center; border: 1px solid black;">Link</th>
+				</tr>
+				% for rec in object.xendit_info_ids:         
+					<tr>
+						<td style="border: 1px solid black;">${(rec.bank_code)}</td>
+						<td style="border: 1px solid black;">${(rec.va_number)}</td>
+						<td style="border: 1px solid black;">
+							<a href="${(rec.account_so_url)}">${(rec.account_so_url)}</a>
+						</td>
+					</tr>
+				% endfor
+			</table>
+			<br/>
+			<p>Demikian kami sampaikan, atas perhatiannya kami ucapkan terima kasih.
+			Apabila Bapak/Ibu mengalami kendala atau membutuhkan informasi,
+			silakan menghubungi Customer Care 24 jam kami di nomor telepon 08xx xxxx xxx, Webchat, E-mail : ${(object.external)}
+			atau kunjungi website kami di : www.toffinindonesia.com.</p>
+			]]>
+			</field>
+		</record>
+		
+	</data>
+</odoo>

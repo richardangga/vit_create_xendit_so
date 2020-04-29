@@ -1,2 +1,2 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_vit_create_xendit_invoice_vit_create_xendit_invoice,vit_create_xendit_invoice.vit_create_xendit_invoice,model_vit_create_xendit_invoice_vit_create_xendit_invoice,,1,0,0,0
+xendit_info_manager,xendit_info_manager,model_xendit_info,,1,1,1,0
